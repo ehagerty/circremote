@@ -505,3 +505,129 @@ chmod 600 ~/.circremote/config.json
   "circup": "/usr/local/bin/circup"
 }
 ```
+
+### What serial ports can I use?
+
+**macOS/Linux:**
+- `/dev/ttyUSB0` - USB-to-serial adapter
+- `/dev/ttyACM0` - Arduino-style device
+- `/dev/ttyS0` - Built-in serial port
+
+**Windows:**
+- `COM1`, `COM2`, `COM3`, etc. - Standard Windows COM ports
+- Check Device Manager to find the correct COM port number
+
+**Finding your port:**
+```bash
+# macOS/Linux
+ls /dev/tty*
+
+# Windows
+# Check Device Manager > Ports (COM & LPT)
+```
+
+### How do I fix serial port permission issues?
+
+**macOS/Linux:**
+```bash
+# Check if user is in dialout group
+groups $USER
+
+# Add user to dialout group
+sudo usermod -a -G dialout $USER
+
+# Log out and back in, or run:
+newgrp dialout
+```
+
+**Windows:**
+- Run as Administrator if permission denied
+- Check Device Manager for port conflicts
+- Ensure device drivers are installed
+
+### What if circremote is not recognized on Windows?
+
+If you get an error like `'circremote' is not recognized as an internal or external command`, Python or the pip installation directory is not in your Windows PATH.
+
+**Solution: Add Python to Windows PATH**
+
+1. **Find your Python installation:**
+   ```cmd
+   python --version
+   ```
+   If this works, note the Python version. If not, you need to install Python first.
+
+2. **Find your pip installation directory:**
+   ```cmd
+   python -m site --user-base
+   ```
+   This will show something like `C:\Users\YourUsername\AppData\Local\Programs\Python\Python3x\Lib\site-packages`
+
+3. **Add Python Scripts to PATH:**
+   - Press `Win + R`, type `sysdm.cpl`, press Enter
+   - Click "Environment Variables"
+   - Under "User variables", find "Path" and click "Edit"
+   - Click "New" and add: `C:\Users\YourUsername\AppData\Local\Programs\Python\Python3x\Scripts`
+   - Replace `YourUsername` with your actual username
+   - Replace `Python3x` with your Python version (e.g., `Python39`, `Python310`)
+   - Click "OK" on all dialogs
+
+4. **Alternative: Use Python module directly:**
+   ```cmd
+   python -m circremote COM3 BME280
+   ```
+
+5. **Restart your command prompt** and try again:
+   ```cmd
+   circremote --version
+   ```
+
+**Note:** If you installed Python with the Microsoft Store, the path might be different. Use `where python` to find the correct location.
+
+### How does the timeout feature work?
+
+The `-t` or `--timeout` option sets a maximum time (in seconds) for circremote to wait for output from the device.
+
+**Behavior:**
+- **Serial connections**: Timeout applies to waiting for device output
+- **WebSocket connections**: Timeout applies to connection establishment
+- **Default**: 10 seconds if not specified
+- **Disable**: Use `-t 0` to disable timeout
+
+**Cross-platform compatibility:**
+- **Windows**: Uses `threading.Timer` for timeout handling
+- **macOS/Linux**: Uses `signal.SIGALRM` with `threading.Timer` fallback
+- **All platforms**: Timeout properly exits circremote when reached
+
+**Example:**
+```bash
+# Wait up to 30 seconds for output
+circremote -t 30 /dev/ttyUSB0 BME280
+
+# Wait up to 5 seconds for output
+circremote -t 5 COM3 scan-i2c
+
+# No timeout (wait indefinitely)
+circremote -t 0 /dev/ttyUSB0 long_running_command
+```
+
+### How do I use quiet mode?
+```bash
+# Quiet mode - suppresses all circremote output except device output
+circremote -q /dev/ttyUSB0 BME280
+
+# Quiet mode with auto-confirm (skips all prompts)
+circremote -q -y /dev/ttyUSB0 BME280
+
+# Quiet mode with skip-circup (if dependencies need to be installed)
+circremote -q -c /dev/ttyUSB0 BME280
+```
+
+**Quiet mode behavior:**
+- **Suppresses**: All circremote messages, warnings, progress info, module descriptions
+- **Shows**: Only output from the CircuitPython device
+- **Exits with error**: If any confirmation is needed (untested commands, offline warnings, dependencies)
+- **Use with `-y`**: Combine with `-y` to auto-confirm all prompts in quiet mode
+- **Use with `-c`**: Combine with `-c` to skip dependency installation in quiet mode
+
+**Note**: Cannot be used with `-v` (verbose) option - they are mutually exclusive.

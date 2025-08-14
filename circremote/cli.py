@@ -15,6 +15,8 @@ import tempfile
 from pathlib import Path
 from argparse import ArgumentParser, Namespace
 from typing import Dict, Any, Optional
+import platform
+import threading
 
 from .config import Config
 from .connection import CircuitPythonConnection
@@ -1290,7 +1292,9 @@ class CLI:
         
         # Create a temporary requirements file
         import tempfile
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as temp_file:
+        
+        # Use cross-platform temp file creation
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False, encoding='utf-8') as temp_file:
             temp_file.write(requirements_content)
             temp_requirements_path = temp_file.name
         
@@ -1371,30 +1375,51 @@ class CLI:
     def monitor_output(self, connection, options):
         """Monitor output from the connection with configurable timeout."""
         import signal
+        import platform
+        import threading
         
         # Get timeout from options, default to 10 seconds if not specified
         timeout = getattr(options, 'timeout', 10.0)
         
-        # Set up timeout handler for serial connections
-        def timeout_handler(signum, frame):
-            raise TimeoutError("Timeout reached")
+        # Cross-platform timeout handling
+        timeout_timer = None
+        timeout_flag = threading.Event()
         
-        # Only set up signal-based timeout for serial connections if timeout > 0
         if connection.connection_type == 'serial' and timeout > 0:
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(int(timeout))
+            def timeout_handler():
+                timeout_flag.set()
+            
+            if platform.system() == 'Windows':
+                # Windows doesn't support SIGALRM, use threading.Timer
+                timeout_timer = threading.Timer(timeout, timeout_handler)
+                timeout_timer.start()
+            else:
+                # Unix-like systems can use signal.alarm
+                try:
+                    signal.signal(signal.SIGALRM, lambda signum, frame: timeout_handler())
+                    signal.alarm(int(timeout))
+                except (AttributeError, OSError):
+                    # Fallback to threading.Timer if SIGALRM is not available
+                    timeout_timer = threading.Timer(timeout, timeout_handler)
+                    timeout_timer.start()
         
         try:
             if connection.connection_type == 'serial':
-                self.monitor_serial_output(connection, options)
+                self.monitor_serial_output(connection, options, timeout_flag)
             else:
                 self.monitor_websocket_output(connection, options)
         finally:
-            # Cancel the alarm if it was set
+            # Cancel the timeout if it was set
             if connection.connection_type == 'serial' and timeout > 0:
-                signal.alarm(0)
+                if timeout_timer:
+                    timeout_timer.cancel()
+                elif platform.system() != 'Windows':
+                    try:
+                        signal.alarm(0)
+                    except (AttributeError, OSError):
+                        pass
 
-    def monitor_serial_output(self, connection, options):
+    def monitor_serial_output(self, connection, options, timeout_flag=None):
         """Monitor output from serial connection."""
         buffer = ""
         found_start = False
@@ -1405,6 +1430,11 @@ class CLI:
         self.debug(f"Initial state: buffer='{buffer}', found_start={found_start}, found_end={found_end}", options)
         
         while True:
+            # Check for timeout
+            if timeout_flag and timeout_flag.is_set():
+                self.debug("Timeout reached, exiting output monitoring", options)
+                break
+                
             try:
                 data = connection.read_nonblock(1024)
                 if not data:

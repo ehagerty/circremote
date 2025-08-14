@@ -6,6 +6,7 @@ import json
 import os
 import stat
 import getpass
+import platform
 from pathlib import Path
 
 
@@ -15,7 +16,8 @@ class Config:
         if options and hasattr(options, 'config') and options.config:
             self.config_path = Path(options.config)
         else:
-            self.config_path = Path.home() / '.circremote' / 'config.json'
+            # Cross-platform config directory
+            self.config_path = self._get_config_path()
         
         self.devices = {}
         self.command_aliases = {}
@@ -23,6 +25,17 @@ class Config:
         self.circup_path = None
         self.options = options
         self.load_config()
+
+    def _get_config_path(self):
+        """Get the cross-platform config file path."""
+        # Use platform-specific home directory
+        home_dir = Path.home()
+        
+        # Create .circremote directory if it doesn't exist
+        config_dir = home_dir / '.circremote'
+        config_dir.mkdir(exist_ok=True)
+        
+        return config_dir / 'config.json'
 
     def find_device(self, name):
         """Find a device by name in the configuration."""
@@ -56,8 +69,8 @@ class Config:
                     self.debug(f"Found command '{command_name}' in search path: {search_path}")
                     return command_path
         
-        # Search in ~/.circremote/commands
-        user_commands_dir = Path.home() / '.circremote' / 'commands'
+        # Search in ~/.circremote/commands (cross-platform)
+        user_commands_dir = self._get_config_path().parent / 'commands'
         if user_commands_dir.exists():
             command_path = user_commands_dir / command_name
             if command_path.exists() and command_path.is_dir():
@@ -84,11 +97,12 @@ class Config:
             
         self.debug("Config file exists")
 
-        # Check file permissions - complain if world accessible
-        self.check_file_permissions()
+        # Check file permissions - complain if world accessible (Unix-like systems only)
+        if platform.system() != 'Windows':
+            self.check_file_permissions()
 
         try:
-            with open(self.config_path, 'r') as f:
+            with open(self.config_path, 'r', encoding='utf-8') as f:
                 config_content = f.read()
                 self.debug(f"Read config file, content length: {len(config_content)}")
                 config_data = json.loads(config_content)
@@ -145,7 +159,7 @@ class Config:
             sys.exit(1)
 
     def check_file_permissions(self):
-        """Check if config file has appropriate permissions."""
+        """Check if config file has appropriate permissions (Unix-like systems only)."""
         try:
             stat_info = self.config_path.stat()
             current_user = getpass.getuser()

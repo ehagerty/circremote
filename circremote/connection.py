@@ -8,6 +8,7 @@ import base64
 import serial
 import websocket
 import threading
+import platform
 from urllib.parse import urlparse
 
 
@@ -224,12 +225,15 @@ class CircuitPythonConnection:
         self.debug("Establishing serial connection")
         self.connection_type = 'serial'
         
+        # Normalize serial port name for cross-platform compatibility
+        port_name = self.normalize_serial_port(self.connection_string)
+        
         try:
-            self.debug(f"Attempting to open serial port '{self.connection_string}'")
+            self.debug(f"Attempting to open serial port '{port_name}'")
             self.debug("Serial port settings: 115200 bps, 8 data bits, 1 stop bit, no parity")
             
             self.connection = serial.Serial(
-                port=self.connection_string,
+                port=port_name,
                 baudrate=115200,
                 bytesize=serial.EIGHTBITS,
                 parity=serial.PARITY_NONE,
@@ -239,12 +243,58 @@ class CircuitPythonConnection:
             
             self.debug("Serial port opened successfully")
             if self.debug_options and self.debug_options.get('verbose'):
-                print(f"Opened serial port {self.connection_string} at 115200 bps")
+                print(f"Opened serial port {port_name} at 115200 bps")
             
         except Exception as e:
             print(f"Error opening serial port: {e}")
             self.debug(f"Serial port error details: {type(e).__name__}: {e}")
+            
+            # Provide helpful error messages for common issues
+            if platform.system() == 'Windows':
+                print("\nCommon Windows serial port issues:")
+                print("  • Use 'COM1', 'COM2', etc. instead of '/dev/tty*'")
+                print("  • Check Device Manager to find the correct COM port")
+                print("  • Ensure the device is connected and recognized")
+                print("  • Try running as Administrator if permission denied")
+            else:
+                print("\nCommon Unix serial port issues:")
+                print("  • Use '/dev/ttyUSB0', '/dev/ttyACM0', etc.")
+                print("  • Check if user is in 'dialout' group: groups $USER")
+                print("  • Add user to dialout group: sudo usermod -a -G dialout $USER")
+                print("  • Check device permissions: ls -la /dev/tty*")
+            
             raise
+
+    def normalize_serial_port(self, port_name):
+        """Normalize serial port name for cross-platform compatibility."""
+        # If it's already a valid port name, return as-is
+        if self.is_valid_serial_port(port_name):
+            return port_name
+        
+        # Try to convert common patterns
+        if platform.system() == 'Windows':
+            # Convert Unix-style names to Windows COM ports
+            if port_name.startswith('/dev/tty'):
+                # This is a Unix-style name, try to find equivalent COM port
+                # For now, just return the original and let the user specify the correct COM port
+                return port_name
+        else:
+            # Convert Windows-style names to Unix-style
+            if port_name.upper().startswith('COM'):
+                # This is a Windows COM port, try to find equivalent Unix port
+                # For now, just return the original and let the user specify the correct Unix port
+                return port_name
+        
+        return port_name
+
+    def is_valid_serial_port(self, port_name):
+        """Check if the port name is valid for the current platform."""
+        if platform.system() == 'Windows':
+            # Windows COM ports: COM1, COM2, etc.
+            return bool(re.match(r'^COM\d+$', port_name, re.IGNORECASE))
+        else:
+            # Unix-style ports: /dev/ttyUSB0, /dev/ttyACM0, etc.
+            return bool(re.match(r'^/dev/tty[A-Z0-9]+$', port_name))
 
     def is_websocket_connection(self, connection_string):
         """Check if connection string looks like an IP address."""
