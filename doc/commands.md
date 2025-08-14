@@ -108,6 +108,7 @@
 - `scan-wifi` - Scan for WiFi networks 
 - `settings` - Display contents of `settings.toml` (same as `cat settings.toml`) 
 - `uf2` - Restart compatible devices in UF2 bootloader mode (this will take the device offline if it's on wifi)
+- **enable-webworkflow** - Configure CircuitPython Web Workflow and WiFi on ESP32 devices (⚠️ can make device go offline)
 
 ### OneWire Interface
 - `DS2484` - 1-Wire master controller for I2C to 1-Wire bridge functionality

@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 import board
+import time
 from digitalio import DigitalInOut, Direction, Pull
 
 led = DigitalInOut({{ led_pin }})

@@ -611,6 +611,96 @@ circremote -t 5 COM3 scan-i2c
 circremote -t 0 /dev/ttyUSB0 long_running_command
 ```
 
+### How do I set up CircuitPython Web Workflow?
+
+CircuitPython Web Workflow allows you to connect to devices over the network instead of USB.
+
+**Prerequisites:**
+- ESP32-based CircuitPython device (ESP32, ESP32-S2, ESP32-S3, ESP32-C3, ESP32-C6, ESP32-H2)
+- Device connected to WiFi network
+- Device has network connectivity
+- **CIRCUITPY drive unmounted** (the command will check this automatically)
+
+**Setup Steps:**
+
+1. **Unmount CIRCUITPY drive** (if mounted):
+   ```bash
+   # macOS
+   sudo umount /Volumes/CIRCUITPY
+   
+   # Linux
+   sudo umount /media/username/CIRCUITPY
+   
+   # Windows
+   # Right-click on CIRCUITPY drive → Eject
+   ```
+
+2. **Configure Web Workflow:**
+   ```bash
+   # Configure with your WiFi network, port, and Web Workflow password
+   circremote /dev/ttyUSB0 enable-webworkflow "MyWiFiNetwork" "mypassword" 8080 "webpass"
+   ```
+
+3. **Restart the device** to apply the configuration
+
+4. **Test the connection:**
+   ```bash
+   # Connect using Web Workflow (use device's actual IP address)
+   circremote 192.168.1.100:8080 -p webpass system-info
+   ```
+
+**Configuration Details:**
+- **WiFi SSID**: Your WiFi network name
+- **WiFi Password**: Your WiFi network password
+- **Port**: Web server port (default: 8080, range: 1-65535)
+- **Web Workflow Password**: Password for Web Workflow authentication
+
+**Troubleshooting:**
+- Ensure device is connected to WiFi
+- Check that the IP address is correct and reachable
+- Verify the port isn't blocked by firewall
+- Make sure the password matches what you configured
+
+### How do I use the enable-webworkflow command?
+
+The `enable-webworkflow` command configures both WiFi and Web Workflow settings on ESP32 devices in one step.
+
+**Command Format:**
+```bash
+circremote <device> enable-webworkflow <wifi_ssid> <wifi_password> <port> <web_workflow_password>
+```
+
+**Example:**
+```bash
+circremote /dev/ttyUSB0 enable-webworkflow "MyWiFi" "wifipass123" 8080 "webpass456"
+```
+
+**What it does:**
+1. **Checks filesystem mount status** - Ensures CIRCUITPY is unmounted
+2. **Validates ESP32 compatibility** - Confirms the device supports Web Workflow
+3. **Writes configuration to settings.toml**:
+   - `CIRCUITPY_WIFI_SSID` - WiFi network name
+   - `CIRCUITPY_WIFI_PASSWORD` - WiFi password
+   - `CIRCUITPY_WEB_API_PASSWORD` - Web Workflow authentication password
+   - `CIRCUITPY_WEB_API_PORT` - Web server port
+4. **Provides next steps** - Instructions for restarting and connecting
+
+**Safety Features:**
+- **Warns about offline risk** - Command may make device unreachable
+- **Prevents overwriting** - Won't overwrite existing configuration
+- **Mount detection** - Automatically detects if CIRCUITPY is mounted
+- **Port validation** - Ensures port number is valid (1-65535)
+
+**After running the command:**
+1. Restart your CircuitPython device
+2. Device connects to WiFi automatically
+3. Find device IP address (check serial output)
+4. Use circremote with Web Workflow: `circremote <ip>:<port> -p <web_password> <command>`
+
+**Resources:**
+- [CircuitPython Web Workflow Guide](https://learn.adafruit.com/circuitpython-with-esp32-quick-start/setting-up-web-workflow)
+- [CircuitPython Workflows Documentation](https://docs.circuitpython.org/en/latest/docs/workflows.html#web)
+
 ### How do I use quiet mode?
 ```bash
 # Quiet mode - suppresses all circremote output except device output
