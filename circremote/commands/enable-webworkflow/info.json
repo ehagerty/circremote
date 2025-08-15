@@ -23,5 +23,6 @@
             "description": "Password for Web Workflow authentication",
             "required": true
         }
-    ]
+    ],
+    "tested": true
 }

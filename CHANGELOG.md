@@ -5,12 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.12.0] - 2025-08-13
+## [0.12.0] - 2025-08-14
 
 Windows support! Mostly worked on Windows already but this update
-makes timeouts work properly, properly locates the `config.json` file
-and updates the documentation.
+makes timeouts work properly, runs `circup` under Windows,  properly
+locates the `config.json` file and updates the documentation.
 
+New `enable-webworkflow` and `erase_fs` commands
+
+Tested more commands (mostly light sensors), added VEML6075 UV sensor,
+and combined BMP3XX sensors into one command.
 
 ## [0.11.0] - 2025-08-11
 

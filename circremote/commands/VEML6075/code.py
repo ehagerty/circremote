@@ -5,7 +5,7 @@
 import time
 import board
 import busio
-import adafruit_ltr390
+import adafruit_veml6075
 
 # Initialize I2C with fallback
 try:
@@ -13,42 +13,39 @@ try:
 except:
     i2c = board.I2C()
 
-# Initialize LTR390
+# Initialize VEML6075
 try:
-    ltr = adafruit_ltr390.LTR390(i2c, address={{ address }})
+    veml = adafruit_veml6075.VEML6075(i2c)
 except Exception as e:
-    print(f"Error initializing LTR390: {e}")
+    print(f"Error initializing VEML6075: {e}")
     import sys
     sys.exit(1)
 
-print("LTR390 UV Light Sensor")
+print("VEML6075 UV Sensor")
 print("=" * 30)
 
 # Display sensor information
-print(f"Resolution: {ltr.resolution}")
-print(f"Gain: {ltr.gain}")
+print(f"Integration Time: {veml.integration_time}")
 print()
 
 # Main reading loop
 while True:
-    uv_raw = ltr.uvs
-    uv_index = ltr.uvi
-    light = ltr.light
-    lux = ltr.lux
+    uva = veml.uva
+    uvb = veml.uvb
+    uvi = veml.uv_index
     
-    print(f"UV Raw: {uv_raw}")
-    print(f"UV Index: {uv_index:.2f}")
-    print(f"Light: {light}")
-    print(f"Lux: {lux:.1f} lux")
+    print(f"UVA: {uva:.2f}")
+    print(f"UVB: {uvb:.2f}")
+    print(f"UV Index: {uvi:.2f}")
     
     # Determine UV level
-    if uv_index < 3:
+    if uvi < 2:
         uv_level = "Low"
-    elif uv_index < 6:
+    elif uvi < 5:
         uv_level = "Moderate"
-    elif uv_index < 8:
+    elif uvi < 7:
         uv_level = "High"
-    elif uv_index < 11:
+    elif uvi < 10:
         uv_level = "Very High"
     else:
         uv_level = "Extreme"

@@ -27,7 +27,6 @@ print("=" * 25)
 # Display sensor information
 print(f"Mode: {bh1750.mode}")
 print(f"Resolution: {bh1750.resolution} lux")
-print(f"Measurement Time: {bh1750.measurement_time} ms")
 print()
 
 # Main reading loop

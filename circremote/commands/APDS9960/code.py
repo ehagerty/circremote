@@ -15,7 +15,7 @@ except:
 
 # Initialize APDS9960
 try:
-    apds = adafruit_apds9960.apds9960.APDS9960(i2c, address={{ address }})
+    apds = adafruit_apds9960.apds9960.APDS9960(i2c)
 except Exception as e:
     print(f"Error initializing APDS9960: {e}")
     import sys
@@ -34,7 +34,6 @@ print(f"Color Integration Time: {apds.color_integration_time} ms")
 print(f"Color Gain: {apds.color_gain}")
 print(f"Proximity Gain: {apds.proximity_gain}")
 print(f"Gesture Gain: {apds.gesture_gain}")
-print(f"Gesture LED Drive: {apds.gesture_led_drive}")
 print()
 
 # Main reading loop
@@ -62,4 +61,4 @@ while True:
             
     print("-" * 30)
         
-    time.sleep(30)
+    time.sleep(1)

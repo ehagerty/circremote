@@ -27,22 +27,12 @@ print("=" * 45)
 # Display sensor information
 print(f"Measurement Timing Budget: {vl53.measurement_timing_budget} ms")
 print(f"Range: {vl53.range} mm")
-print(f"Signal Rate: {vl53.signal_rate} MCPS")
-print(f"Ambient Rate: {vl53.ambient_rate} MCPS")
-print(f"Spad Count: {vl53.spad_count}")
 print()
 
 # Main reading loop
 while True:
     distance = vl53.range
-    signal_rate = vl53.signal_rate
-    ambient_rate = vl53.ambient_rate
-    spad_count = vl53.spad_count
-    
     print(f"Distance: {distance} mm")
-    print(f"Signal Rate: {signal_rate:.2f} MCPS")
-    print(f"Ambient Rate: {ambient_rate:.2f} MCPS")
-    print(f"SPAD Count: {spad_count}")
     
     # Determine distance level
     if distance < 50:
@@ -59,4 +49,4 @@ while True:
     print(f"Distance Level: {distance_level}")
     print("-" * 30)
     
-    time.sleep(30)
+    time.sleep(1)

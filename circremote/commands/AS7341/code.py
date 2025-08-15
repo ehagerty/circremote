@@ -25,7 +25,6 @@ print("AS7341 Color & Spectral Sensor")
 print("=" * 35)
 
 # Display sensor information
-print(f"Integration Time: {as7341.integration_time} ms")
 print(f"Gain: {as7341.gain}")
 print(f"LED Current: {as7341.led_current} mA")
 print(f"LED Enabled: {as7341.led}")

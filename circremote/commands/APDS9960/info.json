@@ -12,14 +12,8 @@
       "required": false,
       "description": "I2C SCL pin",
       "default": "board.SCL"
-    },
-    {
-      "name": "address",
-      "required": false,
-      "description": "I2C address",
-      "default": "0x39"
     }
   ],
-  "tested": false,
+  "tested": true,
   "warn_offline": false
 }

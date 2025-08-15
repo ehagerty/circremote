@@ -20,6 +20,6 @@
       "default": "0x53"
     }
   ],
-  "tested": false,
+  "tested": true,
   "warn_offline": false
 }

@@ -27,7 +27,6 @@ print("=" * 30)
 # Display sensor information
 print(f"Gain: {tsl.gain}")
 print(f"Integration Time: {tsl.integration_time}")
-print(f"Lux Range: {tsl.lux_range}")
 print()
 
 # Main reading loop
