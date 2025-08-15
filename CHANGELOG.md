@@ -14,7 +14,7 @@ locates the `config.json` file and updates the documentation.
 New `enable-webworkflow` and `erase_fs` commands
 
 Tested more commands (mostly light sensors), added VEML6075 UV sensor,
-and combined BMP3XX sensors into one command.
+VCNL4040 proximity sensor, and combined BMP3XX sensors into one command.
 
 ## [0.11.0] - 2025-08-11
 
