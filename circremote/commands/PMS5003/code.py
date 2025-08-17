@@ -5,7 +5,7 @@
 import time
 import board
 import busio
-import adafruit_pm25
+from adafruit_pm25.uart import PM25_UART
 
 # Initialize UART for PMS5003
 try:
@@ -20,7 +20,8 @@ except:
 
 # Initialize PM2.5 sensor
 try:
-    pms5003 = PMS5003(uart)
+    reset_pin = None
+    pms5003 = PM25_UART(uart)
 except Exception as e:
     print(f"Error initializing PMS5003: {e}")
     import sys
@@ -38,7 +39,7 @@ print()
 # Main reading loop
 while True:
     # Read sensor values
-    aqdata = pm25.read()
+    aqdata = pms5003.read()
         
     # Display readings
     print("PM1.0 Standard: {} μg/m³".format(aqdata["pm10 standard"]))

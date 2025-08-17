@@ -14,6 +14,6 @@
       "default": "board.TX"
     }
   ],
-  "tested": false,
+  "tested": true,
   "warn_offline": false
 }
