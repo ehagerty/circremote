@@ -37,4 +37,4 @@ while True:
         print(f"eCO2: {eco2:.1f} ppm")
         print("-" * 30)
         
-        time.sleep(30) 
+        time.sleep(30)
