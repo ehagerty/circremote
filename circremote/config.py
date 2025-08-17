@@ -200,6 +200,9 @@ class Config:
         if 'password' in device and not isinstance(device['password'], str):
             raise ValueError("Device 'password' must be a string")
 
+        if 'defaults' in device and not isinstance(device['defaults'], dict):
+            raise ValueError("Device 'defaults' must be a dictionary")
+
     def validate_command_alias_config(self, alias):
         """Validate command alias configuration structure."""
         if not isinstance(alias, dict):
@@ -218,6 +221,21 @@ class Config:
         
         if not search_path.strip():
             raise ValueError("Search path cannot be empty")
+
+    def get_device_defaults(self, device_name):
+        """
+        Get default values for variables for a specific device.
+        
+        Args:
+            device_name (str): Name of the device
+            
+        Returns:
+            dict: Dictionary of variable names to default values, or empty dict if no defaults
+        """
+        device = self.devices.get(device_name)
+        if device and 'defaults' in device:
+            return device['defaults'].copy()
+        return {}
 
     def get_circup_path(self):
         """

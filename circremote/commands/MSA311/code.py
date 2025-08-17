@@ -35,4 +35,4 @@ while True:
         print(f"Z: {z:.2f} m/s²")
         print("-" * 30)
         
-        time.sleep(1) 
+        time.sleep(1)

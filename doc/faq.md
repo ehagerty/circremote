@@ -47,6 +47,18 @@ You don't. `circremote` is intended to upload and run a program on a device with
 circremote /dev/ttyUSB0 BME280
 ```
 
+### How do I get help for a specific command?
+```bash
+# Show detailed help including tested status
+circremote -h BME280
+
+# Help shows:
+# - Description of what the command does
+# - Status: ✅ Tested, ⚠️ Not tested, or ❓ Unknown
+# - Required and optional arguments with defaults
+# - Usage examples
+```
+
 ### How do I specify variables for a command?
 ```bash
 # Explicit variable assignment
@@ -57,6 +69,9 @@ circremote /dev/ttyUSB0 mycommand board.IO1 board.IO2
 
 # Mix of both
 circremote /dev/ttyUSB0 mycommand board.IO1 board.IO2 address=0x76
+
+# Using device defaults (configured in config.json)
+circremote my-device BME280  # Uses sda/scl/address from device config
 ```
 
 ### How do I connect to a device over WiFi?
@@ -73,6 +88,41 @@ circremote 192.168.1.100:8080 BME280
 # With password
 circremote -p mypassword 192.168.1.100 BME280
 ```
+
+### How do I use device defaults for variables?
+
+You can configure default values for command variables on a per-device basis in your `~/.circremote/config.json` file. This is especially useful for I2C pin assignments that are specific to your board layout.
+
+**Configuration Example:**
+```json
+{
+  "devices": [
+    {
+      "name": "my-board",
+      "device": "/dev/ttyUSB0",
+      "defaults": {
+        "sda": "board.IO1",
+        "scl": "board.IO2",
+        "address": "0x76"
+      }
+    }
+  ]
+}
+```
+
+**Usage:**
+```bash
+# Instead of specifying pins every time:
+circremote /dev/ttyUSB0 BME280 sda=board.IO1 scl=board.IO2 address=0x76
+
+# You can simply use:
+circremote my-board BME280
+```
+
+**Variable Resolution Priority:**
+1. **Command line values** (highest priority) - `sda=board.IO5`
+2. **Device defaults** (from config.json) - `sda: "board.IO1"`
+3. **Command defaults** (from info.json) - `"default": "board.SDA"`
 
 ### How do I use remote commands from URLs?
 

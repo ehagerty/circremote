@@ -68,7 +68,12 @@ Create `~/.circremote/config.json` (cross-platform):
     {
       "name": "my-device",
       "device": "/dev/ttyUSB0",
-      "friendly_name": "My CircuitPython Board"
+      "friendly_name": "My CircuitPython Board",
+      "defaults": {
+        "sda": "board.IO1",
+        "scl": "board.IO2",
+        "address": "0x76"
+      }
     }
   ],
   "command_aliases": [
@@ -82,6 +87,24 @@ Create `~/.circremote/config.json` (cross-platform):
   ],
   "circup": "/usr/local/bin/circup"
 }
+```
+
+### Device Defaults
+
+You can set default values for command variables on a per-device basis using the `defaults` field in your device configuration. This is especially useful for I2C pin assignments that are specific to your board layout.
+
+**Variable Resolution Priority:**
+1. **Command line values** (highest priority)
+2. **Device defaults** (from config.json)
+3. **Command defaults** (from info.json)
+
+**Example:**
+```bash
+# With device defaults, you can run:
+circremote my-device BME280
+
+# Instead of having to specify pins every time:
+circremote my-device BME280 sda=board.IO1 scl=board.IO2 address=0x76
 ```
 
 Then use device aliases:

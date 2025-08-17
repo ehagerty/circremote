@@ -301,7 +301,7 @@ class CLI:
             self.debug(f"Parsed {len(explicit_vars)} explicit variable assignments", options)
         
         # Add defaults from info.json for any missing variables
-        variables = self.add_defaults_from_info(variables, info_data, command_name)
+        variables = self.add_defaults_from_info(variables, info_data, command_name, device_info)
         
         if variables:
             self.debug(f"Final variables (including defaults): {variables}", options)
@@ -706,6 +706,16 @@ class CLI:
             print(f"  {info_data['description']}")
             print()
         
+        # Show tested status
+        tested_status = info_data.get('tested', None)
+        if tested_status is True:
+            print("Status: ✅ Tested")
+        elif tested_status is False:
+            print("Status: ⚠️  Not tested")
+        else:
+            print("Status: ❓ Unknown")
+        print()
+        
         # Show command line format
         if 'default_commandline' in info_data:
             print("Command line format:")
@@ -933,23 +943,41 @@ class CLI:
             print("Please check the module's info.json file for the correct variable names.")
             sys.exit(1)
 
-    def add_defaults_from_info(self, variables, info_data, command_name):
-        """Add default values from info.json for missing variables."""
+    def add_defaults_from_info(self, variables, info_data, command_name, device_info):
+        """
+        Add default values for missing variables with precedence:
+        1. Command line variables (already in variables dict)
+        2. Device-specific defaults from config
+        3. Command defaults from info.json
+        """
         if not info_data or 'variables' not in info_data:
             return variables
         
         # Create a copy of the variables dict
         result = variables.copy()
         
+        # Get device-specific defaults
+        device_defaults = {}
+        if device_info and 'name' in device_info:
+            device_defaults = self.config.get_device_defaults(device_info['name'])
+            if device_defaults:
+                self.debug(f"Found device defaults for '{device_info['name']}': {device_defaults}", None)
+        
         # Add defaults for any missing variables
         for var in info_data['variables']:
             var_name = var['name']
             if var_name not in result:  # Skip if already provided
-                if 'default' in var:
+                # First, try device-specific default
+                if var_name in device_defaults:
+                    device_default_value = device_defaults[var_name]
+                    result[var_name] = str(device_default_value)
+                    self.debug(f"Added device default '{device_default_value}' for variable '{var_name}'", None)
+                # Then, try command default from info.json
+                elif 'default' in var:
                     default_value = var['default']
                     if default_value is not None:
                         result[var_name] = str(default_value)
-                        self.debug(f"Added default '{default_value}' for variable '{var_name}'", None)
+                        self.debug(f"Added command default '{default_value}' for variable '{var_name}'", None)
         
         return result
 

@@ -74,6 +74,32 @@ circremote /dev/ttyUSB0 https://example.com/sensor_demo.py
 circremote /dev/ttyUSB0 /path/to/my/command.py
 ```
 
+## Getting Help
+
+### General Help
+```bash
+# Show general help and options
+circremote -h
+
+# List all available commands
+circremote -l
+```
+
+### Command-Specific Help
+```bash
+# Show detailed help for a specific command
+circremote -h BME280
+
+# Help shows command status (tested/not tested)
+circremote -h VCNL4040
+```
+
+The command help includes:
+- **Description**: What the command does
+- **Status**: Whether the command has been tested (✅ Tested, ⚠️ Not tested, ❓ Unknown)
+- **Arguments**: Required and optional parameters with defaults
+- **Examples**: Usage examples with different parameter combinations
+
 ## Options
 
 - `-v, --verbose`: Verbose debug output
@@ -84,6 +110,8 @@ circremote /dev/ttyUSB0 /path/to/my/command.py
 - `-C, --config`: Custom config file path
 - `-u, --circup`: Custom circup path
 - `-t, --timeout`: Connection timeout (seconds)
+- `-h, --help`: Show help (general or command-specific)
+- `-l, --list`: List all available commands
 
 ## Examples
 
@@ -94,6 +122,9 @@ circremote /dev/ttyUSB0 BME280
 
 # With verbose output
 circremote -v /dev/ttyUSB0 BME280
+
+# Using device defaults (no need to specify I2C pins)
+circremote my-device BME280
 ```
 
 ### File Operations
