@@ -110,5 +110,8 @@
 - `uf2` - Restart compatible devices in UF2 bootloader mode (this will take the device offline if it's on wifi)
 - **enable-webworkflow** - Configure CircuitPython Web Workflow and WiFi on ESP32 devices (⚠️ can make device go offline)
 
+### Analog & Digital Converters
+- `PCF8591` - 8-bit ADC/DAC converter with 4 analog input channels and 1 analog output channel
+
 ### OneWire Interface
 - `DS2484` - 1-Wire master controller for I2C to 1-Wire bridge functionality

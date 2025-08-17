@@ -5,7 +5,7 @@
 import time
 import board
 import busio
-import adafruit_msa311
+from adafruit_msa3xx import MSA311
 
 # Initialize I2C with fallback
 try:
@@ -15,7 +15,7 @@ except:
 
 # Initialize MSA311
 try:
-    msa = adafruit_msa311.MSA311(i2c, address={{ address }})
+    msa = MSA311(i2c)
 except Exception as e:
     print(f"Error initializing MSA311: {e}")
     import sys
