@@ -27,7 +27,6 @@ print("=" * 25)
 # Display sensor information
 print(f"Range: {lis3dh.range}")
 print(f"Data Rate: {lis3dh.data_rate}")
-print(f"Mode: {lis3dh.mode}")
 print()
 
 # Main reading loop
