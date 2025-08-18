@@ -125,6 +125,9 @@ circremote -v /dev/ttyUSB0 BME280
 
 # Using device defaults (no need to specify I2C pins)
 circremote my-device BME280
+
+# Using global variable defaults (configured in config.json)
+circremote /dev/ttyUSB0 BME280  # Uses global sda/scl defaults
 ```
 
 ### File Operations

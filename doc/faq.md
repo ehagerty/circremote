@@ -122,7 +122,47 @@ circremote my-board BME280
 **Variable Resolution Priority:**
 1. **Command line values** (highest priority) - `sda=board.IO5`
 2. **Device defaults** (from config.json) - `sda: "board.IO1"`
-3. **Command defaults** (from info.json) - `"default": "board.SDA"`
+3. **Global variable defaults** (from config.json) - `sda: "board.SDA"`
+4. **Command defaults** (from info.json) - `"default": "board.SDA"`
+
+### How do I use global variable defaults?
+
+You can configure global default values for command variables that apply to all devices and commands in your `~/.circremote/config.json` file. This is useful for setting common defaults like I2C pins that are consistent across your setup.
+
+**Configuration Example:**
+```json
+{
+  "variable_defaults": {
+    "sda": "board.SDA",
+    "scl": "board.SCL",
+    "address": "0x76"
+  },
+  "devices": [
+    {
+      "name": "my-board",
+      "device": "/dev/ttyUSB0",
+      "defaults": {
+        "sda": "board.IO1",
+        "scl": "board.IO2"
+      }
+    }
+  ]
+}
+```
+
+**Usage:**
+```bash
+# Global defaults apply to all commands unless overridden
+circremote /dev/ttyUSB0 BME280  # Uses global sda/scl, command default address
+circremote my-board BME280      # Uses device sda/scl, global address
+circremote /dev/ttyUSB0 BME280 sda=board.IO5  # Overrides all defaults
+```
+
+**Benefits:**
+- **Consistent defaults**: Set common values once for all commands
+- **Device overrides**: Device-specific defaults still take precedence
+- **Command overrides**: Command line values always take highest priority
+- **Reduced typing**: No need to specify common variables repeatedly
 
 ### How do I use remote commands from URLs?
 

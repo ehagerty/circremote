@@ -85,7 +85,12 @@ Create `~/.circremote/config.json` (cross-platform):
   "search_paths": [
     "/path/to/my/commands"
   ],
-  "circup": "/usr/local/bin/circup"
+  "circup": "/usr/local/bin/circup",
+  "variable_defaults": {
+    "sda": "board.SDA",
+    "scl": "board.SCL",
+    "address": "0x76"
+  }
 }
 ```
 
@@ -96,7 +101,8 @@ You can set default values for command variables on a per-device basis using the
 **Variable Resolution Priority:**
 1. **Command line values** (highest priority)
 2. **Device defaults** (from config.json)
-3. **Command defaults** (from info.json)
+3. **Global variable defaults** (from config.json)
+4. **Command defaults** (from info.json)
 
 **Example:**
 ```bash
@@ -105,6 +111,19 @@ circremote my-device BME280
 
 # Instead of having to specify pins every time:
 circremote my-device BME280 sda=board.IO1 scl=board.IO2 address=0x76
+```
+
+### Global Variable Defaults
+
+You can also set global default values for command variables that apply to all devices and commands using the `variable_defaults` field in your configuration. This is useful for setting common defaults like I2C pins that are consistent across your setup.
+
+**Example:**
+```bash
+# With global defaults, you can run:
+circremote /dev/ttyUSB0 BME280  # Uses global sda/scl defaults
+
+# Device-specific defaults still override global defaults:
+circremote my-device BME280     # Uses device defaults, then global defaults
 ```
 
 Then use device aliases:

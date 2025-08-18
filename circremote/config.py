@@ -23,6 +23,7 @@ class Config:
         self.command_aliases = {}
         self.search_paths = []
         self.circup_path = None
+        self.variable_defaults = {}
         self.options = options
         self.load_config()
 
@@ -148,6 +149,13 @@ class Config:
                     self.debug(f"Found circup path in config: {self.circup_path}")
                 else:
                     self.debug("No 'circup' path found in config")
+                
+                # Load variable defaults
+                if 'variable_defaults' in config_data and isinstance(config_data['variable_defaults'], dict):
+                    self.variable_defaults = config_data['variable_defaults'].copy()
+                    self.debug(f"Found {len(self.variable_defaults)} variable defaults in config: {list(self.variable_defaults.keys())}")
+                else:
+                    self.debug("No 'variable_defaults' found in config")
                     
         except json.JSONDecodeError as e:
             print(f"❌ Error: Config file {self.config_path} contains invalid JSON: {e}")
@@ -236,6 +244,15 @@ class Config:
         if device and 'defaults' in device:
             return device['defaults'].copy()
         return {}
+
+    def get_variable_defaults(self):
+        """
+        Get global default values for variables.
+        
+        Returns:
+            dict: Dictionary of variable names to default values, or empty dict if no defaults
+        """
+        return self.variable_defaults.copy()
 
     def get_circup_path(self):
         """

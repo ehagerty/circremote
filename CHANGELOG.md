@@ -16,6 +16,10 @@ New `enable-webworkflow` and `erase_fs` commands
 Tested more commands (mostly light sensors), added VEML6075 UV sensor,
 VCNL4040 proximity sensor, and combined BMP3XX sensors into one command.
 
+### Added
+- Global variable defaults support via `variable_defaults` in config.json
+- Enhanced variable resolution priority: command line > device defaults > global defaults > command defaults
+
 ## [0.11.0] - 2025-08-11
 
 Added "quiet mode" -q to eliminate noise, for use in testing environments.

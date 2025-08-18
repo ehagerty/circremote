@@ -948,7 +948,8 @@ class CLI:
         Add default values for missing variables with precedence:
         1. Command line variables (already in variables dict)
         2. Device-specific defaults from config
-        3. Command defaults from info.json
+        3. Global variable defaults from config
+        4. Command defaults from info.json
         """
         if not info_data or 'variables' not in info_data:
             return variables
@@ -963,6 +964,11 @@ class CLI:
             if device_defaults:
                 self.debug(f"Found device defaults for '{device_info['name']}': {device_defaults}", None)
         
+        # Get global variable defaults
+        global_defaults = self.config.get_variable_defaults()
+        if global_defaults:
+            self.debug(f"Found global variable defaults: {global_defaults}", None)
+        
         # Add defaults for any missing variables
         for var in info_data['variables']:
             var_name = var['name']
@@ -972,7 +978,12 @@ class CLI:
                     device_default_value = device_defaults[var_name]
                     result[var_name] = str(device_default_value)
                     self.debug(f"Added device default '{device_default_value}' for variable '{var_name}'", None)
-                # Then, try command default from info.json
+                # Then, try global variable default
+                elif var_name in global_defaults:
+                    global_default_value = global_defaults[var_name]
+                    result[var_name] = str(global_default_value)
+                    self.debug(f"Added global default '{global_default_value}' for variable '{var_name}'", None)
+                # Finally, try command default from info.json
                 elif 'default' in var:
                     default_value = var['default']
                     if default_value is not None:
