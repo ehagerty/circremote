@@ -21,6 +21,7 @@
 
 ### Light Sensors
 - `APDS9960` - Digital proximity, ambient light, RGB color, and gesture sensor
+- `AS7262` - Spectral sensor for color identification and material analysis
 - `AS7341` - Multi-spectral color sensor
 - `BH1750` - Digital light sensor 
 - `LTR-303` - Digital light sensor
