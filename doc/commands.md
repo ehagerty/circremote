@@ -28,6 +28,7 @@
 - `LTR-329` - Digital light sensor
 - `LTR390` - UV light sensor 
 - `TCRT1000` - Reflective optical sensor
+- `TSL2561` - High-accuracy digital light sensor with light source identification
 - `TSL2591` - High-dynamic-range digital light sensor
 - `VEML7700` - High-accuracy ambient light sensor
 
