@@ -40,4 +40,4 @@ while True:
         print(f"Temperature: {temperature:.1f}°C")
         print("-" * 30)
         
-        time.sleep(30) 
+        time.sleep(30)

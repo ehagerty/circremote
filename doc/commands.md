@@ -20,6 +20,7 @@
 - `TMP117` - High-accuracy digital temperature sensor
 
 ### Light Sensors
+- `APDS9301` - Digital light sensor with broadband and infrared detection
 - `APDS9960` - Digital proximity, ambient light, RGB color, and gesture sensor
 - `AS7262` - Spectral sensor for color identification and material analysis
 - `AS7341` - Multi-spectral color sensor
