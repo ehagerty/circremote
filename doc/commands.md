@@ -115,5 +115,8 @@
 ### Analog & Digital Converters
 - `PCF8591` - 8-bit ADC/DAC converter with 4 analog input channels and 1 analog output channel
 
+### Power & Energy Sensors
+- `INA219` - High-side current shunt and power monitor with voltage, current, and power measurement
+
 ### OneWire Interface
 - `DS2484` - 1-Wire master controller for I2C to 1-Wire bridge functionality
