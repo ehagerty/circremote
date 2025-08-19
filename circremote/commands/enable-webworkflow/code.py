@@ -7,8 +7,8 @@ import storage
 # Interpolated variables
 wifi_ssid = "{{ wifi_ssid }}"
 wifi_password = "{{ wifi_password }}"
-port = "{{ port }}"
-web_workflow_password = "{{ web_workflow_password }}"
+port = "{{ webworkflow_port }}"
+web_workflow_password = "{{ webworkflow_password }}"
 
 def is_esp32_variant():
     """Check if the board is an ESP32 variant."""
@@ -20,7 +20,7 @@ def is_esp32_variant():
         
         # Fallback: check board module for ESP32 indicators
         board_name = board.board_id.lower()
-        esp32_indicators = ['esp32', 'esp32-s2', 'esp32-s3', 'esp32-c3', 'esp32-c6', 'esp32-h2', 'feather', 'qtpy', 'magtag', 'funhouse']
+        esp32_indicators = ['esp32', 'esp32-s2', 'esp32-s3', 'esp32-c3', 'esp32-c6', 'esp32-h2', 'feather', 'qtpy', 'magtag', 'funhouse', 'bling']
         return any(indicator in board_name for indicator in esp32_indicators)
         
     except Exception as e:

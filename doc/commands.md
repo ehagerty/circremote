@@ -47,6 +47,7 @@
 - `LSM6DSOX` - 6-axis IMU (accelerometer + gyroscope)
 - `MPU6050` - 6-axis motion tracking sensor
 - `MSA311` - 3-axis accelerometer with motion detection
+- `BNO055` - 9-axis absolute orientation sensor with accelerometer, gyroscope, magnetometer, and fused orientation data
 - `VL53L0X` - Time-of-flight distance sensor
 - `VL53L1X` - Long-range time-of-flight sensor
 - `VL53L4CX` - Advanced time-of-flight distance sensor
@@ -82,6 +83,7 @@
 - `MMC5603` - 3-axis magnetometer with high resolution
 - `MLX90393` - 3-axis magnetometer
 - `TLV493D` - 3-axis magnetometer
+- `BNO055` - 9-axis absolute orientation sensor with integrated magnetometer
 
 ### Thermal Imaging
 - `AMG8833` - 8x8 thermal camera sensor for infrared temperature measurements
@@ -101,6 +103,7 @@
 - `ls` - List files and directories recursively
 - `neopixel-blink` - Blinks a NeoPixel LED
 - `neopixel-rainbow` - Cycles through rainbow colors on a NeoPixel LED
+- `neopixel-test` - Diagnostic test for neopixel arrays to identify pixel count issues
 - `ntp` - Get the time from an NTP server 
 - `ping` - Ping (ICMP Echo Request) another device
 - `rm` - Remove files and directories recursively

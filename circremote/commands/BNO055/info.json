@@ -1,0 +1,32 @@
+{
+  "description": "BNO055 9-axis absolute orientation sensor with accelerometer, gyroscope, magnetometer, and fused orientation data",
+  "variables": [
+    {
+      "name": "sda",
+      "required": true,
+      "description": "I2C SDA pin",
+      "default": "board.SDA"
+    },
+    {
+      "name": "scl",
+      "required": true,
+      "description": "I2C SCL pin",
+      "default": "board.SCL"
+    },
+    {
+      "name": "address",
+      "required": true,
+      "description": "I2C address of the BNO055 sensor",
+      "default": 40
+    },
+    {
+      "name": "update_rate",
+      "required": true,
+      "description": "Update rate in seconds between readings",
+      "default": 0.5
+    }
+  ],
+  "default_commandline": "sda scl address update_rate",
+  "tested": false,
+  "warn_offline": false
+}
