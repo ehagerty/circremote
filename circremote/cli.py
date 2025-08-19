@@ -288,7 +288,7 @@ class CLI:
         variables = {}
         
         # First, try to parse as default commandline variables (positional arguments)
-        if info_data:
+        if info_data and remaining_args:
             default_vars = self.parse_default_commandline_variables(remaining_args, info_data, command_name)
             if default_vars:
                 variables.update(default_vars)
