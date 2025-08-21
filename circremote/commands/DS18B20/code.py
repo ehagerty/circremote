@@ -4,20 +4,30 @@
 
 import time
 import board
-import adafruit_ds18x20
+
+from adafruit_onewire.bus import OneWireBus
+from adafruit_ds18x20 import DS18X20
 from digitalio import DigitalInOut, Direction, Pull
 
 # Initialize OneWire bus
 try:
-    onewire = {{ pin }}
+    onewire = OneWireBus({{ pin }})
 except Exception as e:
-    print(f"Error initializing DS18B20: {e}")
+    print(f"Error initializing OneWireBus: {e}")
     import sys
     sys.exit(1)
 
-# Initialize DS18B20
+devices = onewire.scan()
+if len(devices) == 0:
+    print("No OneWire devices found")
+    exit
+
+if len(devices) > 1:
+    print(f"Too many OneWire devices found: {len(devices)}")
+    exit
+
 try:
-    ds18b20 = adafruit_ds18x20.DS18X20(onewire)
+    ds18b20 = DS18X20(onewire, devices[0])
 except Exception as e:
     print(f"Error initializing DS18B20: {e}")
     import sys

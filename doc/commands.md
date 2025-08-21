@@ -103,6 +103,7 @@
 - `ls` - List files and directories recursively
 - `neopixel-blink` - Blinks a NeoPixel LED
 - `neopixel-rainbow` - Cycles through rainbow colors on a NeoPixel LED
+- `neopixel-cylon` - Classic Cylon effect with red blob bouncing side to side
 - `neopixel-test` - Diagnostic test for neopixel arrays to identify pixel count issues
 - `ntp` - Get the time from an NTP server 
 - `ping` - Ping (ICMP Echo Request) another device
