@@ -17,16 +17,10 @@
       "name": "address",
       "required": true,
       "description": "I2C address of the BNO055 sensor",
-      "default": 40
-    },
-    {
-      "name": "update_rate",
-      "required": true,
-      "description": "Update rate in seconds between readings",
-      "default": 0.5
+      "default": "0x40"
     }
   ],
-  "default_commandline": "sda scl address update_rate",
-  "tested": false,
+  "default_commandline": "sda scl address",
+  "tested": true,
   "warn_offline": false
 }

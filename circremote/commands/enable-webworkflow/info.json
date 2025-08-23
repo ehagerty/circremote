@@ -1,7 +1,7 @@
 {
     "description": "Configure CircuitPython Web Workflow and WiFi on ESP32 devices",
     "warn_offline": true,
-    "default_commandline": "wifi_ssid wifi_password port web_workflow_password",
+    "default_commandline": "wifi_ssid wifi_password webworkflow_port webworkflow_password",
     "variables": [
         {
             "name": "wifi_ssid",
@@ -14,12 +14,12 @@
             "required": true
         },
         {
-            "name": "port",
+            "name": "webworkflow_port",
             "description": "Port number for the Web Workflow server (1-65535)",
             "required": true
         },
         {
-            "name": "web_workflow_password",
+            "name": "webworkflow_password",
             "description": "Password for Web Workflow authentication",
             "required": true
         }

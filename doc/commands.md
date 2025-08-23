@@ -97,7 +97,7 @@
 - `blink` - Blinks a simple LED
 - `cat` - Display contents of a file
 - `clean` - Clean unwanted files like ._file_, file~ and others from the device
-- `erase_fs` - erase the filesystem - cannot be undone. Requires the word `yes` as an argument.
+- `erase-fs` - erase the filesystem - cannot be undone. Requires the  word `yes` as an argument. Restarts the device.
 - `hello` - Hello world
 - `info` - Display information about the board - CircuitPython version, pin definitions, free memory and flash, wifi info
 - `ls` - List files and directories recursively
@@ -105,6 +105,8 @@
 - `neopixel-rainbow` - Cycles through rainbow colors on a NeoPixel LED
 - `neopixel-cylon` - Classic Cylon effect with red blob bouncing side to side
 - `neopixel-test` - Diagnostic test for neopixel arrays to identify pixel count issues
+- `matrix-rainbow` - Display a marching rainbow effect on LED matrix displays
+- `matrix-diagnostic` - Run comprehensive diagnostics on LED matrix displays
 - `ntp` - Get the time from an NTP server 
 - `ping` - Ping (ICMP Echo Request) another device
 - `rm` - Remove files and directories recursively
