@@ -2,4 +2,4 @@
 #
 # SPDX-License-Identifier: MIT
 
-VERSION = "0.12.0alpha"
+VERSION = "0.12.0"

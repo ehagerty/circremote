@@ -1,6 +1,6 @@
 # circremote
 
-A command-line tool for remotely executing CircuitPython code on devices over serial or Web Workflow connections.
+A command-line tool for remotely executing CircuitPython code ("commands") on devices over serial or Web Workflow connections.
 
 It can run the commands included with it, your own commands from anywhere in the filesystem, and commands that it loads over HTTP/HTTPS. It can easily execute example programs from Github.
 
@@ -29,6 +29,12 @@ circremote /dev/ttyUSB0 ls /
 
 # Run a sensor command
 circremote /dev/ttyUSB0 BME280
+
+# get board info, memory and flash size, pin definitions
+circremote /dev/ttyUSB0 info
+
+# scan I2C bus
+circremote /dev/ttyUSB0 scan-i2c sda=board.SDA scl=board.SCL
 ```
 
 ### Serial Connection (Windows)
@@ -38,6 +44,12 @@ circremote COM3 ls /
 
 # Run a sensor command
 circremote COM3 BME280
+
+# get board info, memory and flash size, pin definitions
+circremote /dev/ttyUSB0 info
+
+# scan I2C bus
+circremote /dev/ttyUSB0 scan-i2c sda=board.SDA scl=board.SCL
 ```
 
 ### Web Workflow Connection
@@ -47,6 +59,12 @@ circremote 192.168.1.100 BME280
 
 # With password
 circremote -p mypassword 192.168.1.100 BME280
+
+# get board info, memory and flash size, pin definitions
+circremote -p mypassword 192.168.1.100 info
+
+# scan I2C bus
+circremote -p mypassword 192.168.1.100 scan-i2c sda=board.SDA scl=board.SCL
 ```
 
 ### Remote Commands
